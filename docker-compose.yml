@@ -1,19 +1,17 @@
 services:
     alumno-backend:
         image: ms-alumno:v1.0.0
-        deploy:
-            replicas: 3
+        env_file:
+          - .env
         networks:
-          - agusred
+          - msred
         #ports:
         #  - 5000:5000
         environment:
           - FLASK_CONTEXT=${FLASK_CONTEXT}
-          - SQLALCHEMY_TRACK_MODIFICATIONS=${SQLALCHEMY_TRACK_MODIFICATIONS}  
-          - SQLALCHEMY_RECORD_QUERIES=${SQLALCHEMY_RECORD_QUERIES}
           - PROD_DATABASE_URI=${PROD_DATABASE_URI}
-          - DEV_DATABASE_URI=${DEV_DATABASE_URI}
           - TEST_DATABASE_URI=${TEST_DATABASE_URI}
+          - DEV_DATABASE_URI=${DEV_DATABASE_URI}
         labels:
             - "traefik.enable=true"
             - "traefik.http.routers.alumno-backend.rule=Host(`alumno-backend.universidad.localhost`)"
@@ -21,5 +19,5 @@ services:
             - "traefik.http.services.alumno-backend.loadbalancer.server.port=5000"
             - "traefik.docker.network=mired"     
 networks:
-    agusred:
+    msred:
         external: true

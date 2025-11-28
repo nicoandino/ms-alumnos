@@ -1,9 +1,10 @@
 import logging
 import os
 from flask import Flask
-from app.config import config
+from app.config.settings import factory
 from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
+
 
 
 db = SQLAlchemy()
@@ -17,7 +18,7 @@ def create_app() -> Flask:
     app_context = os.getenv('FLASK_CONTEXT')
     # https://flask.palletsprojects.com/en/stable/api/#flask.Flask
     app = Flask(__name__)
-    f = config.factory(app_context if app_context else 'development')
+    f = factory(app_context if app_context else 'development')
     app.config.from_object(f)
     
     db.init_app(app)
