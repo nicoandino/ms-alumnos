@@ -1,23 +1,37 @@
+version: "3.9"
+
 services:
-    alumno-backend:
-        image: ms-alumno:v1.0.0
-        env_file:
-          - .env
-        networks:
-          - msred
-        #ports:
-        #  - 5000:5000
-        environment:
-          - FLASK_CONTEXT=${FLASK_CONTEXT}
-          - PROD_DATABASE_URI=${PROD_DATABASE_URI}
-          - TEST_DATABASE_URI=${TEST_DATABASE_URI}
-          - DEV_DATABASE_URI=${DEV_DATABASE_URI}
-        labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.alumno-backend.rule=Host(`alumno-backend.universidad.localhost`)"
-            - "traefik.http.routers.alumno-backend.tls=true"
-            - "traefik.http.services.alumno-backend.loadbalancer.server.port=5000"
-            - "traefik.docker.network=mired"     
+  alumno-backend:
+    image: ms-alumno:v1.0.0
+
+    deploy:
+      replicas: 3
+
+    # 🔵 IMPORTANTE: el servicio debe estar en AMBAS redes
+    networks:
+      - msred     # red interna microservicios
+      - mired     # red externa donde está Traefik
+
+    environment:
+      - FLASK_CONTEXT=${FLASK_CONTEXT}
+      - SQLALCHEMY_TRACK_MODIFICATIONS=${SQLALCHEMY_TRACK_MODIFICATIONS}
+      - SQLALCHEMY_RECORD_QUERIES=${SQLALCHEMY_RECORD_QUERIES}
+      - PROD_DATABASE_URI=${PROD_DATABASE_URI}
+      - DEV_DATABASE_URI=${DEV_DATABASE_URI}
+      - TEST_DATABASE_URI=${TEST_DATABASE_URI}
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.alumno-backend.rule=Host(`alumno-backend.universidad.localhost`)"
+      - "traefik.http.routers.alumno-backend.tls=true"
+      - "traefik.http.services.alumno-backend.loadbalancer.server.port=5000"
+
+      # 🔵 Traefik SIEMPRE usa la red externa (mired)
+      - "traefik.docker.network=mired"
+
+# 🔵 Ambas redes marcadas como external porque Swarm las crea afuera
 networks:
-    msred:
-        external: true
+  msred:
+    external: true
+  mired:
+    external: true
