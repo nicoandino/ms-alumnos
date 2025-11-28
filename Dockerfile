@@ -1,23 +1,28 @@
-# Imagen base de Python
 FROM python:3.11-slim
 
-# Crear directorio de trabajo
+# Instalamos dependencias del sistema necesarias
+RUN apt-get update && \
+    apt-get install -y curl build-essential libpq-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+# Instalamos uv
+RUN curl -fsSL https://astral.sh/uv/install.sh | sh
+
+ENV PATH="/root/.local/bin:${PATH}"
+
 WORKDIR /app
 
-# Copiar el archivo de dependencias
+# Copiar solo el pyproject primero (mejor cache)
 COPY pyproject.toml .
 
-# Instalar uv
-RUN pip install uv
-
-# Instalar dependencias
+# Crear entorno virtual e instalar dependencias
 RUN uv sync --no-dev
 
-# Copiar el resto del código
+# Copiar el resto del proyecto
 COPY . .
 
 # Exponer puerto
 EXPOSE 5000
 
-# Comando de ejecución
-CMD ["python", "app.py"]
+# Asegurar que ejecutamos dentro del .venv
+CMD [".venv/bin/python", "app.py"]
