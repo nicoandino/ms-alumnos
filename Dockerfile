@@ -1,31 +1,23 @@
-FROM python:3.14-slim
+# Imagen base de Python
+FROM python:3.11-slim
 
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
+# Crear directorio de trabajo
+WORKDIR /app
 
-# El usuario de la app
-RUN useradd --create-home --home-dir /home/flaskapp flaskapp
+# Copiar el archivo de dependencias
+COPY pyproject.toml .
 
-RUN apt-get update && \
-    apt-get install -y python3-dev build-essential libpq-dev curl && \
-    rm -rf /var/lib/apt/lists/*
+# Instalar uv
+RUN pip install uv
 
-WORKDIR /home/flaskapp
-USER flaskapp
+# Instalar dependencias
+RUN uv sync --no-dev
 
-# Instalar UV
-RUN curl -fsSL https://astral.sh/uv/install.sh -o uv-installer.sh \
-    && sh uv-installer.sh \
-    && rm uv-installer.sh
+# Copiar el resto del código
+COPY . .
 
-ENV PATH="/home/flaskapp/.local/bin:${PATH}"
-
-COPY pyproject.toml uv.lock ./
-RUN uv sync --locked
-
-COPY app ./app
-COPY wsgi.py .
-
+# Exponer puerto
 EXPOSE 5000
 
-CMD ["granian", "--port", "5000", "--host", "0.0.0.0", "--interface", "wsgi", "wsgi:app"]
+# Comando de ejecución
+CMD ["python", "app.py"]

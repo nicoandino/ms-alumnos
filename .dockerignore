@@ -1,0 +1,21 @@
+# Ignorar entorno virtual
+.venv
+venv
+
+# Archivos temporales
+__pycache__
+*.pyc
+
+# Archivos sensibles
+.env
+
+# Git
+.git
+.gitignore
+
+# Cache de UV
+uv.lock
+
+# MacOS / Windows basura
+.DS_Store
+Thumbs.db
