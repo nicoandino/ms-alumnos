@@ -39,3 +39,7 @@ granian --port 5000 --host 0.0.0.0 --http auto --workers 4 --blocking-threads 4 
 https://github.com/emmett-framework/granian
 
 
+
+## crear red
+docker network create --driver overlay mired
+docker stack deploy -c docker-compose.yml msalumnos

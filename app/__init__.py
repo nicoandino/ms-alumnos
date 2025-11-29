@@ -19,7 +19,10 @@ def create_app() -> Flask:
     app = Flask(__name__)
     f = config.factory(app_context if app_context else 'development')
     app.config.from_object(f)
-    
+    uri = os.getenv("SQLALCHEMY_DATABASE_URI")
+    if uri:
+        app.config["SQLALCHEMY_DATABASE_URI"] = uri
+
     db.init_app(app)
     ma.init_app(app)
     

@@ -1,6 +1,5 @@
 FROM python:3.14-slim
 
-ENV FLASK_CONTEXT=production
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PATH="/home/flaskapp/.venv/bin:$PATH"

@@ -6,13 +6,16 @@ services:
         deploy:
             replicas: 3
         environment:
-            - REDIS_HOST=${REDIS_HOST}
-            - REDIS_PORT=${REDIS_PORT}
-            - REDIS_PASSWORD=${REDIS_PASSWORD}
-            - HOST_DB=${HOST_DB}
-            - USER_DB=${USER_DB}
-            - PASSWORD_DB=${PASSWORD_DB}
-            - NAME_DB=${NAME_DB}            
+            FLASK_CONTEXT: production
+            SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://postgres:nico@host.docker.internal:5432/test_sysacad
+            HOST_DB: host.docker.internal
+            USER_DB: postgres
+            PASSWORD_DB: nico
+            NAME_DB: test_sysacad
+            REDIS_HOST: host.docker.internal
+            REDIS_PORT: "6379"
+            REDIS_PASSWORD: ""
+      
         networks:
             mired:
                 aliases:
