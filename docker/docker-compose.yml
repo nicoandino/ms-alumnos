@@ -1,25 +1,34 @@
+version: "3.9"
+
 services:
-    alumno-backend:
-        image: ms-alumno:v1.0.0
+    alumnos-service:
+        image: gestion-alumnos:v1.0.0
         deploy:
-            replicas: 3
-        networks:
-          - agusred
-        #ports:
-        #  - 5000:5000
+            replicas: 5
         environment:
-          - FLASK_CONTEXT=${FLASK_CONTEXT}
-          - SQLALCHEMY_TRACK_MODIFICATIONS=${SQLALCHEMY_TRACK_MODIFICATIONS}  
-          - SQLALCHEMY_RECORD_QUERIES=${SQLALCHEMY_RECORD_QUERIES}
-          - PROD_DATABASE_URI=${PROD_DATABASE_URI}
-          - DEV_DATABASE_URI=${DEV_DATABASE_URI}
-          - TEST_DATABASE_URI=${TEST_DATABASE_URI}
+            - REDIS_HOST=${REDIS_HOST}
+            - REDIS_PORT=${REDIS_PORT}
+            - REDIS_PASSWORD=${REDIS_PASSWORD}
+            - HOST_DB=${HOST_DB}
+            - USER_DB=${USER_DB}
+            - PASSWORD_DB=${PASSWORD_DB}
+            - NAME_DB=${NAME_DB}            
+        networks:
+            mired:
+                aliases:
+                    - alumnos.universidad.localhost
         labels:
             - "traefik.enable=true"
-            - "traefik.http.routers.alumno-backend.rule=Host(`alumno-backend.universidad.localhost`)"
-            - "traefik.http.routers.alumno-backend.tls=true"
-            - "traefik.http.services.alumno-backend.loadbalancer.server.port=5000"
-            - "traefik.docker.network=mired"     
+            - "traefik.http.routers.alumnos-service.rule=Host(`alumnos.universidad.localhost`)"
+            - "traefik.http.routers.alumnos-service.tls=true"
+            - "traefik.http.services.alumnos-service.loadbalancer.server.port=5000"
+            # Patron Circuit Breaker
+            - "traefik.http.middlewares.alumnos-service.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
+            - "traefik.http.middlewares.alumnos-service.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
+            - "traefik.http.middlewares.alumnos-service.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
+            - "traefik.http.middlewares.alumnos-service.retry.attempts=4"
+            - "traefik.http.middlewares.alumnos-service.retry.initialinterval=100ms"            
+            - "traefik.docker.network=mired"
 networks:
-    agusred:
-        external: true
+    mired:
+      external: true
