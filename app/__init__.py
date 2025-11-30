@@ -27,8 +27,9 @@ def create_app() -> Flask:
     ma.init_app(app)
     
     from app.resources import home, alumno_bp
+    app.register_blueprint(home)
     app.register_blueprint(alumno_bp, url_prefix='/api/v1/alumno')
-    app.register_blueprint(home, url_prefix='/api/v1')
+
 
     @app.shell_context_processor
     def ctx():

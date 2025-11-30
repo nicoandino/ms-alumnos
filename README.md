@@ -43,3 +43,7 @@ https://github.com/emmett-framework/granian
 ## crear red
 docker network create --driver overlay mired
 docker stack deploy -c docker-compose.yml msalumnos
+docker stack deploy -c docker-traefik.yml traefik
+docker stack rm traefik
+docker stack rm msalumnos
+docker pull traefik:v2.11
