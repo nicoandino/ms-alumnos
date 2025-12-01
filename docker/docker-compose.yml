@@ -11,15 +11,14 @@ services:
         - "traefik.scope=swarm"
         - "traefik.http.routers.alumnos-service.rule=Host(`alumnos.universidad.localhost`)"
         - "traefik.http.routers.alumnos-service.entrypoints=web"
+        - "traefik.http.routers.alumnos-service.middlewares=alumnos-service-cb,alumnos-service-retry"
         - "traefik.http.services.alumnos-service.loadbalancer.server.port=5000"
         - "traefik.docker.network=mired"
 
-        # Patrón Circuit Breaker
-        - "traefik.http.middlewares.alumnos-service.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
-        - "traefik.http.middlewares.alumnos-service.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
-        - "traefik.http.middlewares.alumnos-service.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
-        - "traefik.http.middlewares.alumnos-service.retry.attempts=4"
-        - "traefik.http.middlewares.alumnos-service.retry.initialinterval=100ms"
+        # Patron Circuit Breaker y Retries
+        - "traefik.http.middlewares.alumnos-service-cb.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100 || ResponseCodeRatio(500, 600, 0, 600) > 0.25 || NetworkErrorRatio() > 0.5"
+        - "traefik.http.middlewares.alumnos-service-retry.retry.attempts=3"
+        - "traefik.http.middlewares.alumnos-service-retry.retry.initialinterval=1s"
 
     environment:
       FLASK_CONTEXT: production
