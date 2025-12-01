@@ -10,8 +10,7 @@ services:
         - "traefik.enable=true"
         - "traefik.scope=swarm"
         - "traefik.http.routers.alumnos-service.rule=Host(`alumnos.universidad.localhost`)"
-        - "traefik.http.routers.alumnos-service.entrypoints=websecure"
-        - "traefik.http.routers.alumnos-service.tls=true"
+        - "traefik.http.routers.alumnos-service.entrypoints=web"
         - "traefik.http.services.alumnos-service.loadbalancer.server.port=5000"
         - "traefik.docker.network=mired"
 
