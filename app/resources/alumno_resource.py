@@ -1,4 +1,5 @@
 from flask import jsonify, Blueprint, request
+from marshmallow import ValidationError
 
 from app.mapping.alumno_mapping import AlumnoMapping
 from app.services.alumno_service import AlumnoService
@@ -18,7 +19,10 @@ def buscar_por_id(id):
 
 @alumno_bp.route('/', methods=['POST'])
 def crear():
-    alumno = alumno_mapping.load(request.get_json())
+    try:
+        alumno = alumno_mapping.load(request.get_json())
+    except ValidationError as err:
+        return jsonify(err.messages), 400
     AlumnoService.crear(alumno)
     return jsonify("Alumno creado exitosamente"), 200
 

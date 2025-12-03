@@ -99,7 +99,7 @@ usar en terminal
 --
 cd docker
 --
-docker stack deploy -c docker-compose.yml 
+docker stack deploy -c docker-compose.yml msalumno
 --
 se inicia el ms
 ## iniciar traefik
@@ -134,4 +134,4 @@ http://traefik.universidad.localhost:8080
 ## detener los contenedores
 estos comandos se pueden poner en cualquier terminal 
 docker stack rm traefik
-docker stack rm msalumnos
+docker stack rm msalumno

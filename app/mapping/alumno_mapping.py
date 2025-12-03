@@ -11,8 +11,6 @@ class AlumnoMapping(Schema):
     sexo = fields.String(required=True, validate=validate.Length(equal=1))
     nro_legajo = fields.Integer(required=True)
     fecha_ingreso = fields.Date(required=True)
-    
-    especialidad_id = fields.Integer(required=True)
 
     @post_load
     def nuevo_alumno(self, data, **kwargs):
