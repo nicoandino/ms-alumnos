@@ -1,2 +1,0 @@
-from .tipodocumento_repositorio import TipoDocumentoRepository
-from .alumno_repositorio import AlumnoRepository
