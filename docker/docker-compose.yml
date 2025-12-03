@@ -2,16 +2,28 @@ version: "3.9"
 
 services:
   alumnos-service:
-    image: gestion-alumnos:v1.0.0
+    image: gestion-alumnos:v1.0.1
+    env_file:
+      - .env
 
     deploy:
       replicas: 3
+      update_config:
+        order: start-first
+      restart_policy:
+        condition: on-failure
       labels:
         - "traefik.enable=true"
         - "traefik.scope=swarm"
         - "traefik.http.routers.alumnos-service.rule=Host(`alumnos.universidad.localhost`)"
         - "traefik.http.routers.alumnos-service.entrypoints=web"
         - "traefik.http.routers.alumnos-service.middlewares=alumnos-service-cb,alumnos-service-retry"
+        - "traefik.http.routers.alumnos-service-secure.rule=Host(`alumnos.universidad.localhost`)"
+        - "traefik.http.routers.alumnos-service-secure.entrypoints=websecure"
+        - "traefik.http.routers.alumnos-service-secure.middlewares=alumnos-service-cb,alumnos-service-retry"
+        - "traefik.http.routers.alumnos-service-secure.tls=true"
+        - "traefik.http.routers.alumnos-service-secure.tls.certresolver=le"
+        - "traefik.http.routers.alumnos-service-secure.service=alumnos-service"
         - "traefik.http.services.alumnos-service.loadbalancer.server.port=5000"
         - "traefik.docker.network=mired"
 
@@ -20,16 +32,25 @@ services:
         - "traefik.http.middlewares.alumnos-service-retry.retry.attempts=3"
         - "traefik.http.middlewares.alumnos-service-retry.retry.initialinterval=1s"
 
+
+  # verifica el estado del contenedor para evitar Service Unavailable
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 2s
+      timeout: 1s
+      retries: 3
+      start_period: 0s
+
     environment:
-      FLASK_CONTEXT: production
-      SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://postgres:nico@host.docker.internal:5432/test_sysacad
-      HOST_DB: host.docker.internal
-      USER_DB: postgres
-      PASSWORD_DB: nico
-      NAME_DB: test_sysacad
-      REDIS_HOST: host.docker.internal
-      REDIS_PORT: "6379"
-      REDIS_PASSWORD: ""
+      - FLASK_CONTEXT=${FLASK_CONTEXT:-production}
+      - SQLALCHEMY_DATABASE_URI=${SQLALCHEMY_DATABASE_URI}
+      - HOST_DB=${HOST_DB}
+      - USER_DB=${USER_DB}
+      - PASSWORD_DB=${PASSWORD_DB}
+      - NAME_DB=${NAME_DB}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
 
     networks:
       mired:
