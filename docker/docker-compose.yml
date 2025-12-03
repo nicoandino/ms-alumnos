@@ -27,6 +27,19 @@ services:
         - "traefik.http.services.alumnos-service.loadbalancer.server.port=5000"
         - "traefik.docker.network=mired"
 
+        # Patron Circuit Breaker y Retries
+        - "traefik.http.middlewares.alumnos-service-cb.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100 || ResponseCodeRatio(500, 600, 0, 600) > 0.25 || NetworkErrorRatio() > 0.5"
+        - "traefik.http.middlewares.alumnos-service-retry.retry.attempts=3"
+        - "traefik.http.middlewares.alumnos-service-retry.retry.initialinterval=1s"
+
+
+  # verifica el estado del contenedor para evitar Service Unavailable
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 2s
+      timeout: 1s
+      retries: 3
+      start_period: 0s
 
     environment:
       - FLASK_CONTEXT=${FLASK_CONTEXT:-production}
