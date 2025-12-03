@@ -6,12 +6,8 @@ import os
 class AppTestCase(unittest.TestCase):
 
     def setUp(self):
-<<<<<<< HEAD
         os.environ["FLASK_CONTEXT"] = "testing"
         os.environ["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
-=======
-        os.environ['FLASK_CONTEXT'] = 'testing'
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3
         self.app = create_app()
         self.app_context = self.app.app_context()
         self.app_context.push()

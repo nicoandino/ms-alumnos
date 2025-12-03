@@ -176,7 +176,6 @@ wheels = [
 ]
 
 [[package]]
-<<<<<<< HEAD
 name = "iniconfig"
 version = "2.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -186,8 +185,6 @@ wheels = [
 ]
 
 [[package]]
-=======
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3
 name = "itsdangerous"
 version = "2.2.0"
 source = { registry = "https://pypi.org/simple" }
@@ -306,10 +303,7 @@ dependencies = [
     { name = "marshmallow-sqlalchemy" },
     { name = "psycopg2" },
     { name = "pyrefly" },
-<<<<<<< HEAD
     { name = "pytest" },
-=======
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3
     { name = "python-dotenv" },
     { name = "sqlalchemy" },
 ]
@@ -324,16 +318,12 @@ requires-dist = [
     { name = "marshmallow-sqlalchemy", specifier = "==1.0.0" },
     { name = "psycopg2", specifier = ">=2.9.11" },
     { name = "pyrefly", specifier = "==0.38.2" },
-<<<<<<< HEAD
     { name = "pytest", specifier = ">=9.0.1" },
-=======
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3
     { name = "python-dotenv", specifier = "==1.1.1" },
     { name = "sqlalchemy", specifier = "==2.0.41" },
 ]
 
 [[package]]
-<<<<<<< HEAD
 name = "packaging"
 version = "25.0"
 source = { registry = "https://pypi.org/simple" }
@@ -352,8 +342,6 @@ wheels = [
 ]
 
 [[package]]
-=======
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3
 name = "psycopg2"
 version = "2.9.11"
 source = { registry = "https://pypi.org/simple" }
@@ -365,7 +353,6 @@ wheels = [
 ]
 
 [[package]]
-<<<<<<< HEAD
 name = "pygments"
 version = "2.19.2"
 source = { registry = "https://pypi.org/simple" }
@@ -375,8 +362,6 @@ wheels = [
 ]
 
 [[package]]
-=======
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3
 name = "pyrefly"
 version = "0.38.2"
 source = { registry = "https://pypi.org/simple" }
@@ -393,7 +378,6 @@ wheels = [
 ]
 
 [[package]]
-<<<<<<< HEAD
 name = "pytest"
 version = "9.0.1"
 source = { registry = "https://pypi.org/simple" }
@@ -410,8 +394,6 @@ wheels = [
 ]
 
 [[package]]
-=======
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3
 name = "python-dotenv"
 version = "1.1.1"
 source = { registry = "https://pypi.org/simple" }

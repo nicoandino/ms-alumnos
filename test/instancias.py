@@ -8,7 +8,6 @@ from app.services import (
     
 )
 
-<<<<<<< HEAD
 def nuevotipodocumento(
     dni=46291002,
     libreta_civica="nacional",
@@ -20,18 +19,11 @@ def nuevotipodocumento(
     tipo_documento = TipoDocumento()
     tipo_documento.sigla = sigla
     tipo_documento.nombre = nombre
-=======
-def nuevotipodocumento(dni=46291002, libreta_civica="nacional", libreta_enrolamiento="naci", pasaporte="nacnal"):
-    tipo_documento = TipoDocumento()
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3
     tipo_documento.dni = dni
     tipo_documento.libreta_civica = libreta_civica
     tipo_documento.libreta_enrolamiento = libreta_enrolamiento
     tipo_documento.pasaporte = pasaporte
-<<<<<<< HEAD
 
-=======
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3
     TipoDocumentoService.crear(tipo_documento)
     return tipo_documento
 

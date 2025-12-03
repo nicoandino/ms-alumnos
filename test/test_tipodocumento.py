@@ -10,10 +10,7 @@ from app import db
 class TipoDocumentoTestCase(unittest.TestCase):
     def setUp(self):
         os.environ['FLASK_CONTEXT'] = 'testing'
-<<<<<<< HEAD
         os.environ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-=======
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3
         self.app = create_app()
         self.app_context = self.app.app_context()
         self.app_context.push()
@@ -29,11 +26,7 @@ class TipoDocumentoTestCase(unittest.TestCase):
         self.assertIsNotNone(tipodocumento)
         self.assertIsNotNone(tipodocumento.id)
         self.assertGreaterEqual(tipodocumento.id, 1)
-<<<<<<< HEAD
         self.assertEqual(int(tipodocumento.dni), 46291002)
-=======
-        self.assertEqual(tipodocumento.dni, 46291002)
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3
 
     def test_buscar_por_id(self):
         tipodocumento = nuevotipodocumento()
@@ -54,7 +47,6 @@ class TipoDocumentoTestCase(unittest.TestCase):
         tipodocumento.dni = 89291002
         tipodocumento_actualizado = TipoDocumentoService.actualizar(tipodocumento.id, tipodocumento)
         self.assertEqual(tipodocumento_actualizado.dni, 89291002)
-<<<<<<< HEAD
 
     def test_actualizar_inexistente(self):
         nuevotipodocumento()  # solo para poblar la BD
@@ -69,8 +61,6 @@ class TipoDocumentoTestCase(unittest.TestCase):
         resultado = TipoDocumentoService.actualizar(9999, tipo_falso)
         self.assertIsNone(resultado)
 
-=======
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3
     
     def test_borrar(self):
         tipodocumento = nuevotipodocumento()
@@ -78,10 +68,7 @@ class TipoDocumentoTestCase(unittest.TestCase):
         self.assertTrue(borrado)
         resultado = TipoDocumentoService.buscar_por_id(tipodocumento.id)
         self.assertIsNone(resultado)
-<<<<<<< HEAD
 
     def test_borrar_inexistente(self):
         borrado = TipoDocumentoService.borrar_por_id(9999)
         self.assertFalse(borrado)
-=======
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3

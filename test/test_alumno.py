@@ -14,10 +14,7 @@ class AlumnoTestCase(unittest.TestCase):
 
     def setUp(self):
         os.environ['FLASK_CONTEXT'] = 'testing'
-<<<<<<< HEAD
         os.environ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
-=======
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3
         self.app = create_app()
         self.app_context = self.app.app_context()
         self.app_context.push()
@@ -70,7 +67,6 @@ class AlumnoTestCase(unittest.TestCase):
         alumno.nombre = "Juan actualizado"
         alumno_actualizado = AlumnoService.actualizar(alumno.id, alumno)
         self.assertEqual(alumno_actualizado.nombre, "Juan actualizado")
-<<<<<<< HEAD
 
     def test_actualizar_inexistente(self):
         alumno = nuevoalumno()
@@ -90,9 +86,6 @@ class AlumnoTestCase(unittest.TestCase):
         resultado = AlumnoService.actualizar(9999, alumno_falso)
         self.assertIsNone(resultado)
 
-=======
-    
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3
     
     def test_borrar(self):
         alumno = nuevoalumno()
@@ -101,12 +94,7 @@ class AlumnoTestCase(unittest.TestCase):
         resultado = AlumnoService.buscar_por_id(alumno.id)
         self.assertIsNone(resultado)
 
-<<<<<<< HEAD
     def test_borrar_inexistente(self):
         borrado = AlumnoService.borrar_por_id(9999)
         self.assertFalse(borrado)
 
-=======
-
-        
->>>>>>> ced81115879fc4583ba631cc95c3ddadfbe743c3
