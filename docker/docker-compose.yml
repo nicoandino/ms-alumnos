@@ -1,37 +1,42 @@
 version: "3.9"
 
 services:
-    alumnos-service:
-        image: gestion-alumnos:v1.0.0
-        deploy:
-            replicas: 3
-        environment:
-            FLASK_CONTEXT: production
-            SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://postgres:nico@host.docker.internal:5432/test_sysacad
-            HOST_DB: host.docker.internal
-            USER_DB: postgres
-            PASSWORD_DB: nico
-            NAME_DB: test_sysacad
-            REDIS_HOST: host.docker.internal
-            REDIS_PORT: "6379"
-            REDIS_PASSWORD: ""
-      
-        networks:
-            mired:
-                aliases:
-                    - alumnos.universidad.localhost
-        labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.alumnos-service.rule=Host(`alumnos.universidad.localhost`)"
-            - "traefik.http.routers.alumnos-service.tls=true"
-            - "traefik.http.services.alumnos-service.loadbalancer.server.port=5000"
-            # Patron Circuit Breaker
-            - "traefik.http.middlewares.alumnos-service.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
-            - "traefik.http.middlewares.alumnos-service.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
-            - "traefik.http.middlewares.alumnos-service.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
-            - "traefik.http.middlewares.alumnos-service.retry.attempts=4"
-            - "traefik.http.middlewares.alumnos-service.retry.initialinterval=100ms"            
-            - "traefik.docker.network=mired"
+  alumnos-service:
+    image: gestion-alumnos:v1.0.0
+
+    deploy:
+      replicas: 3
+      labels:
+        - "traefik.enable=true"
+        - "traefik.scope=swarm"
+        - "traefik.http.routers.alumnos-service.rule=Host(`alumnos.universidad.localhost`)"
+        - "traefik.http.routers.alumnos-service.entrypoints=web"
+        - "traefik.http.services.alumnos-service.loadbalancer.server.port=5000"
+        - "traefik.docker.network=mired"
+
+        # Patrón Circuit Breaker
+        - "traefik.http.middlewares.alumnos-service.circuitbreaker.expression=LatencyAtQuantileMS(50.0) > 100"
+        - "traefik.http.middlewares.alumnos-service.circuitbreaker.expression=ResponseCodeRatio(500, 600, 0, 600) > 0.25"
+        - "traefik.http.middlewares.alumnos-service.circuitbreaker.expression=NetworkErrorRatio() > 0.5"
+        - "traefik.http.middlewares.alumnos-service.retry.attempts=4"
+        - "traefik.http.middlewares.alumnos-service.retry.initialinterval=100ms"
+
+    environment:
+      FLASK_CONTEXT: production
+      SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://postgres:nico@host.docker.internal:5432/test_sysacad
+      HOST_DB: host.docker.internal
+      USER_DB: postgres
+      PASSWORD_DB: nico
+      NAME_DB: test_sysacad
+      REDIS_HOST: host.docker.internal
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: ""
+
+    networks:
+      mired:
+        aliases:
+          - alumnos.universidad.localhost
+
 networks:
-    mired:
-      external: true
+  mired:
+    external: true
