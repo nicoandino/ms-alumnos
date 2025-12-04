@@ -2,7 +2,7 @@ services:
     alumnos-service:
         image: gestion-alumnos:v1.0.0
         deploy:
-            replicas: 1
+            replicas: 5
         environment:
             - REDIS_HOST=${REDIS_HOST}
             - REDIS_PORT=${REDIS_PORT}

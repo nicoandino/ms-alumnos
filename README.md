@@ -78,10 +78,11 @@ Para generar e instalar certificados para desarrollo se puede utilizar **mkcert*
 
 1. Descargar mkcert: https://github.com/FiloSottile/mkcert/tags
 
-2. Agregar en C:\Windows\System32\drivers\etc\hosts al final del archivo:
+2. Agregar en C:\Windows\System32\drivers\etc\hosts
+ al final del archivo:
    127.0.0.1 traefik.universidad.localhost
    127.0.0.1 alumno-backend.universidad.localhost
-
+   127.0.0.1 whoami.universidad.localhost
 3. Generar certificados:
    mkcert -cert-file certs/cert.pem -key-file certs/key.pem "universidad.localhost" "*.universidad.localhost" 127.0.0.1 ::1
 
