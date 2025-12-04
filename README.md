@@ -199,6 +199,9 @@ MSALUMNOS/
 
 El .env se crea según el env-example del microservicio
 
+# Crear imagen
+docker build -t gestion-alumnos:v1.0.0 .
+
 # Levantar el microservicio de alumnos
 
 Ubicarse en la carpeta `docker` del proyecto MSALUMNOS (donde está el `docker-compose.yml`).
