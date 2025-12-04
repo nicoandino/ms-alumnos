@@ -145,3 +145,19 @@ migrations/
 
 # Snyk Security Extension - AI Rules (auto-generated)
 .github/instructions/snyk_rules.instructions.md
+
+# Ignore Docker environment file
+docker/.env
+# End of Snyk Security Extension - AI Rules
+# Ignore environment files
+*.env
+.env.*
+# Ignore dotenv files
+*.dotenv
+dotenv.*
+# ignorar traefik data
+traefik/data/pgdata
+traefik/data/dump.rdb
+# ignorar certs traefik
+traefik/certs/cert.pem
+traefik/certs/key.pem
