@@ -200,6 +200,7 @@ MSALUMNOS/
 El .env se crea según el env-example del microservicio
 
 # Crear imagen
+ubicarse en la raiz del proyecto
 docker build -t gestion-alumnos:v1.0.0 .
 
 # Levantar el microservicio de alumnos
