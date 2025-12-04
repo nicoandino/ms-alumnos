@@ -31,9 +31,14 @@ def create_app() -> Flask:
 
     # Registrar blueprints
     from app.resources import home, alumno_bp
+    from app.resources.retry_demo import retry_bp
+    from app.resources.circuit_demo import circuit_bp
+    from app.resources.cache_demo import cache_bp
     app.register_blueprint(home)
     app.register_blueprint(alumno_bp, url_prefix="/api/v1/alumno")
-
+    app.register_blueprint(retry_bp, url_prefix="/debug")
+    app.register_blueprint(circuit_bp, url_prefix="/debug")
+    app.register_blueprint(cache_bp)
     @app.shell_context_processor
     def ctx():
         return {"app": app, "db": db}
