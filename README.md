@@ -221,3 +221,46 @@ http://alumnos.universidad.localhost/api/v1/alumno
 
 Alumnos – GET por ID:
 http://alumnos.universidad.localhost/api/v1/alumno/1
+
+# Tests de rendimiento con k6
+Este proyecto incluye pruebas de rendimiento y validación mediante k6.
+
+Requisitos
+Para ejecutar k6, primero debemos instalarlo:
+
+https://grafana.com/grafana/download?product=k6
+
+Ejecutar tests de carga
+
+Los scripts se encuentran en la carpeta /tests (o donde el equipo los ubicó).
+
+Ejecutar pruebas k6
+Dentro del proyecto existe una carpeta de tests donde encontraremos scripts como:
+-spike_test.js
+-demo_test.js
+
+Para ejecutar el test, hacemos:
+k6 run test\spike_test.js
+
+modificar la URL objetivo dentro del script:
+const BASE_URL = 'https://alumnos.universidad.localhost';
+
+Spike Test(incluido)
+El archivo spike_test.js simula:
+
+.Subida a 10.000 usuarios virtuales
+.Mantener carga por 20s
+.Descenso a 0 usuarios
+
+Sirve para probar:
+.Resiliencia
+.Errores 500 / 429 / 400
+.Saturación del endpoint
+
+Archivos “demo”
+
+Además del Spike Test, el proyecto contiene archivos demo utilizados como pruebas rápidas:
+
+.Validan si el microservicio está respondiendo
+.Permiten probar Traefik
+.Útiles antes de cargar k6
