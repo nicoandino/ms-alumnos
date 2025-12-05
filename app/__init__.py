@@ -15,14 +15,17 @@ def create_app() -> Flask:
     app.config["DEBUG"] = flask_context == "development"
     app.config["TESTING"] = flask_context == "testing"
 
-    # Datos de la base (también vienen del .env del contenedor)
-    db_host = os.getenv("HOST_DB", "localhost")
-    db_user = os.getenv("USER_DB", "postgres")
-    db_password = os.getenv("PASSWORD_DB", "")
-    db_name = os.getenv("NAME_DB", "postgres")
+    if "SQLALCHEMY_DATABASE_URI" in os.environ:
+        app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["SQLALCHEMY_DATABASE_URI"]
+    else:
+        # Datos de la base (también vienen del .env del contenedor)
+        db_host = os.getenv("HOST_DB", "localhost")
+        db_user = os.getenv("USER_DB", "postgres")
+        db_password = os.getenv("PASSWORD_DB", "")
+        db_name = os.getenv("NAME_DB", "postgres")
 
-    uri = f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:5432/{db_name}"
-    app.config["SQLALCHEMY_DATABASE_URI"] = uri
+        uri = f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:5432/{db_name}"
+        app.config["SQLALCHEMY_DATABASE_URI"] = uri
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     # Inicializar extensiones

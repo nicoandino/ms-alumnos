@@ -1,5 +1,9 @@
 import unittest
 import os
+
+os.environ['FLASK_CONTEXT'] = 'testing'
+os.environ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+
 from flask import current_app
 from app import create_app
 from datetime import date
@@ -13,8 +17,6 @@ from app import db
 class AlumnoTestCase(unittest.TestCase):
 
     def setUp(self):
-        os.environ['FLASK_CONTEXT'] = 'testing'
-        os.environ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
         self.app = create_app()
         self.app_context = self.app.app_context()
         self.app_context.push()
@@ -24,7 +26,7 @@ class AlumnoTestCase(unittest.TestCase):
         db.session.remove()
         db.drop_all()
         self.app_context.pop()
-
+    
     def test_crear(self):
         alumno = nuevoalumno()
         self.assertIsNotNone(alumno)
@@ -97,4 +99,3 @@ class AlumnoTestCase(unittest.TestCase):
     def test_borrar_inexistente(self):
         borrado = AlumnoService.borrar_por_id(9999)
         self.assertFalse(borrado)
-
