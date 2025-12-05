@@ -6,7 +6,7 @@ from flask import Blueprint, jsonify
 
 cache_bp = Blueprint("cache", __name__)
 
-# Config Redis
+# Configuracion de conexion a Redis
 r = redis.Redis(
     host="redis", 
     port=6379, 
@@ -15,7 +15,7 @@ r = redis.Redis(
 )
 
 def recurso_lento():
-    """Simula un recurso externo lento (1 segundo)"""
+    """Simula un recurso externo con latencia de 1 segundo"""
     time.sleep(1.0)
     return {
         "msg": "dato generado",
@@ -25,7 +25,7 @@ def recurso_lento():
 @cache_bp.route("/debug/cache/<clave>")
 def cache_test(clave):
 
-    # 1. ¿Existe en cache?
+    # 1. Verificar si el dato existe en la cache
     data = r.get(f"cache:{clave}")
     if data is not None:
         return jsonify({
@@ -33,10 +33,10 @@ def cache_test(clave):
             "data": json.loads(data)
         }), 200
 
-    # 2. No está en cache → calcular
+    # 2. Si no esta en la cache, calcular el resultado
     result = recurso_lento()
 
-    # 3. Guardarlo en cache (expira en 30 segundos)
+    # 3. Almacenar el resultado en la cache por 30 segundos
     r.setex(f"cache:{clave}", 30, json.dumps(result))
 
     return jsonify({
