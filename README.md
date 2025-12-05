@@ -1,27 +1,34 @@
+
+Microservicio realizado por los alumnos:
+-Andino Nicolás , Legajo N°9935
+-Assenza Ezequiel , Legajo N° 9943
+-Lopez Matias , Legajo N° 10097 
+-Orella Lucas , Legajo N° 10163
+
 # uv
 
-## Instalación
+# Instalación
 1. Abrir **consola de PowerShell como administrador**.  
 2. Instalar `uv`:
    powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
 3. Reiniciar la PC.
 
-## Crear Proyecto
+# Crear Proyecto
 uv init nombre-proyecto
 uv init  # si el proyecto ya existe
 
 En nuestro caso ya existe, porque estarían copiando la carpeta desde Git.
 
-## Instalación de entorno virtual (venv)
+# Instalación de entorno virtual (venv)
 uv venv
 
-## Agregar dependencias 
+# Agregar dependencias 
 uv add flask==3.1.2
 
-## Sincronizar dependencias 
+# Sincronizar dependencias 
 uv sync
 
-## Documentación
+# Documentación
 Referencia: https://docs.astral.sh/uv/getting-started/first-steps/
 
 
@@ -30,10 +37,10 @@ Referencia: https://docs.astral.sh/uv/getting-started/first-steps/
 Servidor HTTP de **alto rendimiento** escrito en **Rust** para **aplicaciones Python**.  
 Está diseñado para ejecutar aplicaciones web que siguen los estándares **ASGI, RSGI y WSGI**.
 
-## Ejecución de una aplicación web
+# Ejecución de una aplicación web
 granian --port 5000 --host 0.0.0.0 --http auto --workers 4 --blocking-threads 4 --backlog 2048 --interface wsgi wsgi:app
 
-## Documentación
+# Documentación
 https://github.com/emmett-framework/granian
 
 
@@ -222,45 +229,3 @@ http://alumnos.universidad.localhost/api/v1/alumno
 Alumnos – GET por ID:
 http://alumnos.universidad.localhost/api/v1/alumno/1
 
-# Tests de rendimiento con k6
-Este proyecto incluye pruebas de rendimiento y validación mediante k6.
-
-Requisitos
-Para ejecutar k6, primero debemos instalarlo:
-
-https://grafana.com/grafana/download?product=k6
-
-Ejecutar tests de carga
-
-Los scripts se encuentran en la carpeta /tests (o donde el equipo los ubicó).
-
-Ejecutar pruebas k6
-Dentro del proyecto existe una carpeta de tests donde encontraremos scripts como:
--spike_test.js
--demo_test.js
-
-Para ejecutar el test, hacemos:
-k6 run test\spike_test.js
-
-modificar la URL objetivo dentro del script:
-const BASE_URL = 'https://alumnos.universidad.localhost';
-
-Spike Test(incluido)
-El archivo spike_test.js simula:
-
-.Subida a 10.000 usuarios virtuales
-.Mantener carga por 20s
-.Descenso a 0 usuarios
-
-Sirve para probar:
-.Resiliencia
-.Errores 500 / 429 / 400
-.Saturación del endpoint
-
-Archivos “demo”
-
-Además del Spike Test, el proyecto contiene archivos demo utilizados como pruebas rápidas:
-
-.Validan si el microservicio está respondiendo
-.Permiten probar Traefik
-.Útiles antes de cargar k6
