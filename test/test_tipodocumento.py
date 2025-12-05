@@ -13,7 +13,7 @@ from app import db
 
 class TipoDocumentoTestCase(unittest.TestCase):
     def setUp(self):
-        # Ya NO va os.environ aquí
+        # La configuracion de variables de entorno se realiza antes de la creacion de la aplicacion
         self.app = create_app()
         self.app_context = self.app.app_context()
         self.app_context.push()
@@ -52,7 +52,7 @@ class TipoDocumentoTestCase(unittest.TestCase):
         self.assertEqual(tipodocumento_actualizado.dni, 89291002)
 
     def test_actualizar_inexistente(self):
-        nuevotipodocumento()  # solo para poblar la BD
+        nuevotipodocumento()  # Inserta un registro de prueba para inicializar la base de datos
         
         tipo_falso = TipoDocumento(
             dni="123",
