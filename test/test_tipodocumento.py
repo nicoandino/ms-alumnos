@@ -1,5 +1,9 @@
 import unittest
 import os
+
+os.environ['FLASK_CONTEXT'] = 'testing'
+os.environ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+
 from flask import current_app
 from app import create_app
 from app.models.tipodocumento import TipoDocumento
@@ -9,8 +13,7 @@ from app import db
 
 class TipoDocumentoTestCase(unittest.TestCase):
     def setUp(self):
-        os.environ['FLASK_CONTEXT'] = 'testing'
-        os.environ['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+        # Ya NO va os.environ aquí
         self.app = create_app()
         self.app_context = self.app.app_context()
         self.app_context.push()
