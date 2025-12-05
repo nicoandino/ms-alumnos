@@ -1,5 +1,9 @@
 import os
 import unittest
+
+os.environ["FLASK_CONTEXT"] = "testing"
+os.environ["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
+
 from datetime import date
 from app import create_app, db
 from app.models.tipodocumento import TipoDocumento
@@ -8,8 +12,7 @@ from app.models.tipodocumento import TipoDocumento
 class AlumnoApiTestCase(unittest.TestCase):
 
     def setUp(self):
-        os.environ["FLASK_CONTEXT"] = "testing"
-        os.environ["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
+        # Eliminar las líneas de os.environ de aquí
         self.app = create_app()
         self.app_context = self.app.app_context()
         self.app_context.push()
