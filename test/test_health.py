@@ -1,12 +1,14 @@
 import os
 import unittest
+
+os.environ["FLASK_CONTEXT"] = "testing"
+os.environ["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
+
 from app import create_app, db
 
 
 class HealthTestCase(unittest.TestCase):
     def setUp(self):
-        os.environ["FLASK_CONTEXT"] = "testing"
-        os.environ["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
         self.app = create_app()
         self.app_context = self.app.app_context()
         self.app_context.push()
