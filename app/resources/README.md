@@ -29,5 +29,6 @@ print(r.ping())
 r.set("prueba", "ok")
 Luego consultar en Redis para validar persistencia:
 •	get prueba
+
 # Conclusión
 Los mecanismos de balanceo, retry, circuit breaker y caché distribuido funcionan correctamente. Redis almacena y comparte objetos entre réplicas, y Traefik ejecuta sus middlewares según lo esperado.
