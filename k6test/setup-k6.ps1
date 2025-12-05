@@ -1,3 +1,4 @@
+# Configurar e instalar K6 en Windows usando PowerShell
 # Crear carpeta para K6
 $k6Dir = "$env:LOCALAPPDATA\k6"
 New-Item -ItemType Directory -Force -Path $k6Dir | Out-Null
