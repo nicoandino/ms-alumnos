@@ -145,6 +145,7 @@ Dentro de la base de datos asociada al servidor (por ejemplo `test_sysacad`):
 2. Ejecutar el siguiente script SQL:
 -- Borrar tablas existentes
 
+-- Borrar tablas si existen (respetando dependencias)
 DROP TABLE IF EXISTS alumnos CASCADE;
 DROP TABLE IF EXISTS tipo_documento CASCADE;
 
@@ -157,14 +158,17 @@ CREATE TABLE tipo_documento (
 
 -- Tabla alumnos
 CREATE TABLE alumnos (
-    id               INTEGER PRIMARY KEY,
+    id               SERIAL PRIMARY KEY,
     nombre           VARCHAR(100) NOT NULL,
     apellido         VARCHAR(100) NOT NULL,
     nro_documento    INTEGER NOT NULL,
-    tipo_documento   VARCHAR(10) NOT NULL,
+    tipo_documento_id INTEGER NOT NULL,
     sexo             VARCHAR(1) NOT NULL,
     nro_legajo       INTEGER NOT NULL,
-    especialidad_id  INTEGER NOT NULL
+    especialidad_id  INTEGER NOT NULL,
+    CONSTRAINT fk_alumnos_tipo_documento
+        FOREIGN KEY (tipo_documento_id)
+        REFERENCES tipo_documento(id)
 );
 
 -- Datos base para tipo_documento
@@ -174,16 +178,33 @@ INSERT INTO tipo_documento (sigla, nombre) VALUES
 ('LC',  'Libreta Cívica'),
 ('PAS', 'Pasaporte');
 
--- Ejemplos de alumnos (adaptados a tu nuevo modelo)
+-- Ejemplos de alumnos usando tipo_documento_id
+-- (no ponemos el id, deja que SERIAL lo genere solo)
 INSERT INTO alumnos (
-    id, nombre, apellido, nro_documento, tipo_documento,
+    nombre, apellido, nro_documento, tipo_documento_id,
     sexo, nro_legajo, especialidad_id
 )
 VALUES
-    (1, 'Juan',  'Pérez',     40123456, 'DNI', 'M', 1001, 10),
-    (2, 'Ana',   'Gómez',     39222111, 'DNI', 'F', 1002, 11),
-    (3, 'Lucas', 'Rodríguez', 1234567,  'PAS', 'M', 1003, 12),
-    (4, 'Sofía', 'López',     30555111, 'DNI', 'F', 1004, 13);
+    (
+        'Juan',  'Pérez', 40123456,
+        (SELECT id FROM tipo_documento WHERE sigla = 'DNI'),
+        'M', 1001, 10
+    ),
+    (
+        'Ana',   'Gómez', 39222111,
+        (SELECT id FROM tipo_documento WHERE sigla = 'DNI'),
+        'F', 1002, 11
+    ),
+    (
+        'Lucas', 'Rodríguez', 1234567,
+        (SELECT id FROM tipo_documento WHERE sigla = 'PAS'),
+        'M', 1003, 12
+    ),
+    (
+        'Sofía', 'López', 30555111,
+        (SELECT id FROM tipo_documento WHERE sigla = 'DNI'),
+        'F', 1004, 13
+    );
 
 
 # Crear .env para el microservicio MSALUMNOS (Docker)

@@ -10,9 +10,10 @@ class Alumno(db.Model):
     nombre: str = db.Column(db.String(100), nullable=False)
     apellido: str = db.Column(db.String(100), nullable=False)
 
-    nro_documento: int = db.Column(db.Integer, nullable=False)    
-    tipo_documento_id:int = db.Column(db.Integer, db.ForeignKey('tipodocumentos.id'), nullable=False)
-    tipo_documento = db.relationship('TipoDocumento', lazy=True)# ej: "LE", "DNI"
+    nro_documento: int = db.Column(db.Integer, nullable=False)
+
+    tipo_documento_id: int = db.Column(db.Integer,db.ForeignKey('tipo_documento.id'),nullable=False)    
+    tipo_documento = db.relationship('TipoDocumento', lazy=True)
 
     sexo: str = db.Column(db.String(1), nullable=False)
     nro_legajo: int = db.Column(db.Integer, nullable=False)

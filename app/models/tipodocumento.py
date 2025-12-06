@@ -9,6 +9,6 @@ class TipoDocumento(db.Model):
     sigla: str
     nombre: str
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     sigla = db.Column(db.String(10), nullable=False)
     nombre = db.Column(db.String(100), nullable=False)
