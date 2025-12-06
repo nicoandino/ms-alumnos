@@ -5,7 +5,6 @@ Microservicio realizado por los alumnos:
 -Lopez Matias , Legajo N° 10097 
 -Orella Lucas , Legajo N° 10163
 
-
 # uv
 
 # Instalación
@@ -144,51 +143,47 @@ Dentro de la base de datos asociada al servidor (por ejemplo `test_sysacad`):
    Query Tool (Alt + Shift + Q).
 
 2. Ejecutar el siguiente script SQL:
+-- Borrar tablas existentes
 
 DROP TABLE IF EXISTS alumnos CASCADE;
-DROP TABLE IF EXISTS tipodocumentos CASCADE;
+DROP TABLE IF EXISTS tipo_documento CASCADE;
 
-CREATE TABLE tipodocumentos (
-    id                  SERIAL PRIMARY KEY,
-    sigla               VARCHAR(10)  NOT NULL,
-    nombre              VARCHAR(50)  NOT NULL,
-    dni                 INTEGER,
-    libreta_civica      VARCHAR(20),
-    libreta_enrolamiento VARCHAR(20),
-    pasaporte           VARCHAR(20)
+-- Tabla tipo_documento
+CREATE TABLE tipo_documento (
+    id      SERIAL PRIMARY KEY,
+    sigla   VARCHAR(10) NOT NULL,
+    nombre  VARCHAR(100) NOT NULL
 );
 
+-- Tabla alumnos
 CREATE TABLE alumnos (
-    id               SERIAL PRIMARY KEY,
-    nombre           VARCHAR(50)  NOT NULL,
-    apellido         VARCHAR(50)  NOT NULL,
-    nrodocumento     VARCHAR(50)  NOT NULL,
-    tipo_documento_id INTEGER     NOT NULL,
-    fecha_nacimiento DATE         NOT NULL,
-    sexo             VARCHAR(1)   NOT NULL,
-    nro_legajo       INTEGER      NOT NULL,
-    fecha_ingreso    DATE         NOT NULL,
-    CONSTRAINT fk_alumnos_tipodocumentos
-        FOREIGN KEY (tipo_documento_id)
-        REFERENCES tipodocumentos(id)
+    id               INTEGER PRIMARY KEY,
+    nombre           VARCHAR(100) NOT NULL,
+    apellido         VARCHAR(100) NOT NULL,
+    nro_documento    INTEGER NOT NULL,
+    tipo_documento   VARCHAR(10) NOT NULL,
+    sexo             VARCHAR(1) NOT NULL,
+    nro_legajo       INTEGER NOT NULL,
+    especialidad_id  INTEGER NOT NULL
 );
 
-INSERT INTO tipodocumentos (sigla, nombre)
-VALUES 
-    ('DNI', 'Documento Nacional de Identidad'),
-    ('LE',  'Libreta de Enrolamiento'),
-    ('LC',  'Libreta Cívica'),
-    ('PAS', 'Pasaporte');
+-- Datos base para tipo_documento
+INSERT INTO tipo_documento (sigla, nombre) VALUES
+('DNI', 'Documento Nacional de Identidad'),
+('LE',  'Libreta de Enrolamiento'),
+('LC',  'Libreta Cívica'),
+('PAS', 'Pasaporte');
 
+-- Ejemplos de alumnos (adaptados a tu nuevo modelo)
 INSERT INTO alumnos (
-    nombre, apellido, nrodocumento, tipo_documento_id,
-    fecha_nacimiento, sexo, nro_legajo, fecha_ingreso
+    id, nombre, apellido, nro_documento, tipo_documento,
+    sexo, nro_legajo, especialidad_id
 )
 VALUES
-    ('Juan',  'Pérez',   '40123456', 1, '2000-05-10', 'M', 1001, '2019-03-01'),
-    ('Ana',   'Gómez',   '39222111', 1, '1999-11-23', 'F', 1002, '2018-03-01'),
-    ('Lucas', 'Rodríguez','1234567', 4, '1998-07-15', 'M', 1003, '2017-08-01'),
-    ('Sofía', 'López',   '30555111', 1, '2001-01-30', 'F', 1004, '2020-03-01');
+    (1, 'Juan',  'Pérez',     40123456, 'DNI', 'M', 1001, 10),
+    (2, 'Ana',   'Gómez',     39222111, 'DNI', 'F', 1002, 11),
+    (3, 'Lucas', 'Rodríguez', 1234567,  'PAS', 'M', 1003, 12),
+    (4, 'Sofía', 'López',     30555111, 'DNI', 'F', 1004, 13);
 
 
 # Crear .env para el microservicio MSALUMNOS (Docker)
