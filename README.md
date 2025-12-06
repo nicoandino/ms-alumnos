@@ -53,6 +53,8 @@ https://github.com/emmett-framework/granian
 
 # 1. Requisitos previos de infraestructura
 
+# Crear la red
+docker network create mired
 Antes de levantar el microservicio de alumnos necesitás:
 
 - **Docker Desktop** instalado y funcionando.
@@ -62,10 +64,6 @@ Antes de levantar el microservicio de alumnos necesitás:
   - `pgadmin` (pgAdmin4)
   - `traefik` (reverse proxy)
 - Red Docker externa creada (si no existe).
-
-## Crear la red
-docker network create mired
-
 
 # Certificados y Traefik
 
@@ -105,7 +103,7 @@ Los archivos key.pem y cert.pem deben copiarse en la carpeta **certs** de Traefi
 
 # Crear .env para Traefik
 
-Estructura de carpetas (infra del profesor, ejemplo):
+Estructura de carpetas :
 MSALUMNOS/
 ├── app/
 │   ├── __init__.py
@@ -118,32 +116,59 @@ MSALUMNOS/
 └── wsgi.py
 
 El .env se crea según un archivo de ejemplo (env-example) provisto.  
-Una vez creado el .env, ubicarse en la carpeta donde está el docker-compose de Traefik y ejecutar:
-docker compose up
+Una vez creado el .env, ubicarse en la carpeta donde está el docker-compose de Traefik y 
+
+# Levantar contenedor traefik
+docker compose up 
 
 URLs para acceder:
 - PgAdmin: https://pgadmin.universidad.localhost/login?next=/
 - Traefik Dashboard: https://traefik.universidad.localhost/dashboard/#/
 
+# Crear .env para el microservicio MSALUMNOS (Docker)
 
-# Crear servidor en PgAdmin
+Estructura de ejemplo:
+MSALUMNOS/
+├── app/
+│   ├── __init__.py
+│   ├── models/
+│   ├── resources/
+│   └── services/
+├── docker/
+│   ├── docker-compose.yml
+│   └── .env   <- LO CREAMOS NOSOTROS
+└── wsgi.py
 
-Dentro de PgAdmin:
-1. Crear un nuevo servidor.
-2. Configurarlo según los parámetros que se definieron en el .env de Traefik (host, puerto, usuario, contraseña, base de datos).
-3. Es importante que todo concuerde y siempre se usen las mismas variables de entorno.
+El .env se crea según el env-example del microservicio
+
+# Crear imagen
+ubicarse en la raiz del proyecto
+docker build -t gestion-alumnos:v1.0.0 .
+
+# Levantar el microservicio de alumnos
+
+Ubicarse en la carpeta `docker` del proyecto MSALUMNOS (donde está el `docker-compose.yml`).
+
+Si es la primera vez:
+docker compose up --build
+
+Si ya se construyó la imagen previamente:
+docker compose up
+
+
+# Endpoints del microservicio
+
+Alumnos – GET (todos):
+http://alumnos.universidad.localhost/api/v1/alumno
+
+Alumnos – GET por ID:
+http://alumnos.universidad.localhost/api/v1/alumno/1
 
 
 
-# Cargar alumnos (opcional, solo para probar el microservicio)
 
-Dentro de la base de datos asociada al servidor (por ejemplo `test_sysacad`):
-
-1. Una vez creada la base de datos, hacer clic derecho en la base y seleccionar:  
-   Query Tool (Alt + Shift + Q).
-
-2. Ejecutar el siguiente script SQL:
--- Borrar tablas existentes
+# opcional (carga de alumnos)
+consulta sql para la carga de alumnos, si no funciona el archivo sql que crea la base automaticamente
 
 -- Borrar tablas si existen (respetando dependencias)
 DROP TABLE IF EXISTS alumnos CASCADE;
@@ -205,44 +230,4 @@ VALUES
         (SELECT id FROM tipo_documento WHERE sigla = 'DNI'),
         'F', 1004, 13
     );
-
-
-# Crear .env para el microservicio MSALUMNOS (Docker)
-
-Estructura de ejemplo:
-MSALUMNOS/
-├── app/
-│   ├── __init__.py
-│   ├── models/
-│   ├── resources/
-│   └── services/
-├── docker/
-│   ├── docker-compose.yml
-│   └── .env   <- LO CREAMOS NOSOTROS
-└── wsgi.py
-
-El .env se crea según el env-example del microservicio
-
-# Crear imagen
-ubicarse en la raiz del proyecto
-docker build -t gestion-alumnos:v1.0.0 .
-
-# Levantar el microservicio de alumnos
-
-Ubicarse en la carpeta `docker` del proyecto MSALUMNOS (donde está el `docker-compose.yml`).
-
-Si es la primera vez:
-docker compose up --build
-
-Si ya se construyó la imagen previamente:
-docker compose up
-
-
-# Endpoints del microservicio
-
-Alumnos – GET (todos):
-http://alumnos.universidad.localhost/api/v1/alumno
-
-Alumnos – GET por ID:
-http://alumnos.universidad.localhost/api/v1/alumno/1
 
